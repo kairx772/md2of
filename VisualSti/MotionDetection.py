@@ -11,13 +11,14 @@ class MD_borst(object):
         self.lptau = 5.0
         self.hptau = 25.0
 
-        self.Eexc=+50.0
-        self.Einh=-20.0
-        self.gleak=1.0
+        self.Eexc = +50.0
+        self.Einh = -20.0
+        self.gleak = 1.0
+        self.mean = 0.0
         
     def run(self):
 
-        noff = self.input.shape[0]
+        noff = self.input.shape[1]
 
         lp = bs.lowpass(self.input, self.lptau)
         hp = bs.highpass(self.input, self.hptau)
@@ -29,8 +30,9 @@ class MD_borst(object):
         gexc = bs.rect(Mi1,0)
         ginh = bs.rect(Mi9+Mi4,0)
 
-        T4a = (self.Eexc*gexc+self.Einh*ginh)/(gexc+ginh+self.gleak)
+        # self.result = (self.Eexc*gexc+self.Einh*ginh)/(gexc+ginh+self.gleak)
+        self.result = bs.rect((self.Eexc*gexc+self.Einh*ginh)/(gexc+ginh+self.gleak),0)
+        self.mean = np.mean(self.result)
         # T4a_rect=bs.rect(T4a,0)
-
-        self.result = T4a
-        return T4a
+        # self.result = T4a
+        return self.result

@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 from numba import autojit
 # from VisualSti import borst as bs
 import pandas as pd
+import pickle
 
-class gen:
+class sti:
     def __init__(self):
         self.width = 320
         self.height = 240
@@ -29,9 +30,9 @@ class gen:
         self.Vy = self.V*np.cos(self.Vdgr)
         self.Vx = self.V*np.sin(self.Vdgr)
 
-
         # genavi pareter
         self.fname = 'out.avi'
+        self.classfname = 'test.sti'
 
     @autojit
     def singrat(self):
@@ -39,16 +40,8 @@ class gen:
         self.Vy = self.V*np.sin(self.Vdgr)
         self.angl = (self.degr/180)*np.pi
         self.maxt = self.fps*self.sec
-        # self.movie = np.zeros((self.height, self.width, self.maxt))
         [xv, yv, tt] = np.meshgrid(range(0, self.width), range(0, self.height), range(0, self.maxt))
         self.movie = np.cos(2.0*np.pi*((np.sin(self.angl)/self.wlen)*(yv-(self.Vy*tt)) + (np.cos(self.angl)/(self.wlen))*(xv-(self.Vx*tt))))
-        # [xv, yv] = np.meshgrid(range(0, self.width), range(0, self.height))
-        # for t in range(self.maxt):
-        #     print ("frame:", t)
-        #     self.movie[:,:,t] = np.cos(2.0*np.pi*((np.sin(self.angl)/self.wlen)*(yv-(self.Vy*t)) + (np.cos(self.angl)/(self.wlen))*(xv-(self.Vx*t))))
-            # for i in range(self.height):
-            #     for j in range(self.width):
-            #         self.movie[i,j,t] = np.cos(2.0*np.pi*((np.sin(self.angl)/self.wlen)*(i-(self.Vx*t)) + (np.cos(self.angl)/(self.wlen))*(j-(self.Vy*t))))
         self.movie = self.movie*self.contrast*0.5+0.5
         return self.movie
 
@@ -63,22 +56,29 @@ class gen:
             out.write(normalizedImg)
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
+    def savpickle(self):
+        with open(self.classfname, 'wb') as output:
+            pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
 
 def main():
     pass
 
 if __name__ == '__main__': 
 
-    sw0 = gen()
+    sw0 = sti()
     sw0.fps = 120
-    sw0.sec = 10
-    sw0.degr = 30
+    sw0.sec = 4
+    sw0.degr = 45
+    sw0.classfname = 'test2.sti'
     sw = sw0.singrat()
-    sw0.fname = 'test.avi'
+    sw0.fname = 'test2.avi'
     sw0.genavi()
+    sw0.savpickle()
 
-    # plt.imshow(sw[:,:,0], cmap=plt.gray())
-    # plt.show()
+    with open('test.sti', 'rb') as input:
+        sw0 = pickle.load(input)
+    print (sw0.degr)
+
 
     main()
 

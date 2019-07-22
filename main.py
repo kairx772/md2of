@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from VisualSti import GenerateVisualStimuli as gvs
 from VisualSti import MotionDetection as md
 import matplotlib.pyplot as plt
+import pickle
 
 def main():
     pass
@@ -22,6 +23,7 @@ if __name__ == '__main__':
 
     plt.plot(sw[10,10,:], color='black', label='local',linewidth=1)
     plt.plot(test1.result[10,10,:], color='red', label='local',linewidth=1)
-    plt.show()
+    plt.savefig('test.png', bbox_inches='tight')
+    # plt.show()
 
     main()
