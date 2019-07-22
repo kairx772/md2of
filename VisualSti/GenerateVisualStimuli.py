@@ -31,8 +31,7 @@ class sti:
         self.Vx = self.V*np.sin(self.Vdgr)
 
         # genavi pareter
-        self.fname = 'out.avi'
-        self.classfname = 'test.sti'
+        self.avifname = 'out.avi'
 
     @autojit
     def singrat(self):
@@ -47,7 +46,7 @@ class sti:
 
     def genavi(self):
         normalizedImg = np.zeros((self.height, self.width))
-        out = cv.VideoWriter(self.fname, cv.VideoWriter_fourcc(*'XVID'), self.fps, (self.width, self.height))
+        out = cv.VideoWriter(self.avifname, cv.VideoWriter_fourcc(*'XVID'), self.fps, (self.width, self.height))
         for i in range(self.maxt):
             normalizedImg = self.movie[:,:,i] * 255 + 0.5
             # normalizedImg = cv.normalize(self.movie[:,:,i],  normalizedImg, 0, 255, cv.NORM_MINMAX)
@@ -56,7 +55,9 @@ class sti:
             out.write(normalizedImg)
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
-    def savpickle(self):
+
+    def savpickle(self, clsfname = 'test.sti'):
+        self.classfname = clsfname
         with open(self.classfname, 'wb') as output:
             pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
 
@@ -69,17 +70,11 @@ if __name__ == '__main__':
     sw0.fps = 120
     sw0.sec = 4
     sw0.degr = 45
-    sw0.classfname = 'test2.sti'
     sw = sw0.singrat()
-    sw0.fname = 'test2.avi'
-    sw0.genavi()
-    sw0.savpickle()
+    # sw0.genavi()
+    # sw0.savpickle()
 
-    with open('test.sti', 'rb') as input:
-        sw0 = pickle.load(input)
-    print (sw0.degr)
-
-
-    main()
-
-
+    # with open('test.sti', 'rb') as input:
+    #     sw0 = pickle.load(input)
+    # print (sw0.degr)
+    # main()

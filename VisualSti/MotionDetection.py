@@ -1,5 +1,6 @@
 from VisualSti import borst as bs
 import numpy as np
+import pickle
 
 class MD_borst(object):
     """docstring for ClassName"""
@@ -36,3 +37,13 @@ class MD_borst(object):
         # T4a_rect=bs.rect(T4a,0)
         # self.result = T4a
         return self.result
+
+    def savpickle(self, clsfname = 'test.bs'):
+        self.classfname = clsfname
+        with open(self.classfname, 'wb') as output:
+            pickle.dump(self, output, pickle.HIGHEST_PROTOCOL)
+
+    def loadpicke(self, ldfname = 'load.sti'):
+        self.loadfname = ldfname
+        with open(self.loadfname, 'rb') as input:
+            self.input.movie = pickle.load(input)
